@@ -21,7 +21,7 @@ class Controller extends CController
 	 */
 	public $breadcrumbs=array();
 	
-	
+	 
 	/** 
 	 * handle all init functionality.
 	 * Currently we will be handling headers sent.
