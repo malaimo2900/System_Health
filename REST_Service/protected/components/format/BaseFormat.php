@@ -5,6 +5,7 @@ abstract class BaseFormat extends CApplicationComponent {
 	protected $output = null; /// This will contain the contents of the class output
 	protected $model = null; /// The model of the request data
 	
+	
 	abstract protected function formater();
 	
 	
@@ -12,12 +13,14 @@ abstract class BaseFormat extends CApplicationComponent {
 		$this->mdel = $model;
 	}
 	
+	
 	public function getData() {
 		foreach ($this->model as $attr => $value) {
 			yield array($attr, $value);
 		}
 	}
 	
+	 
 	/**
 	 * Returns the contents of variable $output
 	 * return String 
@@ -25,6 +28,7 @@ abstract class BaseFormat extends CApplicationComponent {
 	public function getOutput() {
 		return $this->output;
 	}
+	
 	
 	public function __toString() {
 		return $this->getOutput();
