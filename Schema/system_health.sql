@@ -32,8 +32,11 @@ DROP TABLE IF EXISTS `my_status`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `my_status` (
   `id` tinyint(255) NOT NULL AUTO_INCREMENT,
-  `snmp_init` bit(1) NOT NULL DEFAULT b'0',
-  PRIMARY KEY (`id`)
+  `status` bit(1) NOT NULL,
+  `status_type_id` tinyint(255) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `fk_my_status_1` (`status_type_id`),
+  CONSTRAINT `fk_my_status_1` FOREIGN KEY (`status_type_id`) REFERENCES `status_types` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -86,7 +89,9 @@ CREATE TABLE `snmp_mibs` (
   `mib_id` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   KEY `snmp_mib_info_id` (`snmp_mib_info_id`,`mib_id`(255)),
-  KEY `snmp_mib_info_id_2` (`snmp_mib_info_id`)
+  KEY `snmp_mib_info_id_2` (`snmp_mib_info_id`),
+  KEY `fk_snmp_mibs_1` (`snmp_mib_info_id`),
+  CONSTRAINT `fk_snmp_mibs_1` FOREIGN KEY (`snmp_mib_info_id`) REFERENCES `snmp_mib_info` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -98,6 +103,29 @@ LOCK TABLES `snmp_mibs` WRITE;
 /*!40000 ALTER TABLE `snmp_mibs` DISABLE KEYS */;
 /*!40000 ALTER TABLE `snmp_mibs` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `status_types`
+--
+
+DROP TABLE IF EXISTS `status_types`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `status_types` (
+  `id` tinyint(255) NOT NULL AUTO_INCREMENT,
+  `status_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `status_types`
+--
+
+LOCK TABLES `status_types` WRITE;
+/*!40000 ALTER TABLE `status_types` DISABLE KEYS */;
+/*!40000 ALTER TABLE `status_types` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -108,4 +136,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-01-04 21:06:22
+-- Dump completed on 2014-01-12 18:41:37
