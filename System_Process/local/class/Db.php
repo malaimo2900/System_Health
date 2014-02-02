@@ -23,10 +23,8 @@ class Db extends \PDO {
 	 * @return PDO 
 	 */
     public static function obj() {
-    	global $config;
-		
         if (!self::$dbh) {
-        	$dbConfig = $config->getConfig('database');
+        	$dbConfig = \local\Config::getConfig('database');
             try {
                 self::$dbh = new db($dbConfig['DB_DSN'], $dbConfig['DB_USER_NAME'], $dbConfig['DB_USER_PASS']);
             } catch (\PDOException $e) {
@@ -106,7 +104,7 @@ class Db extends \PDO {
 	/**
 	 * @param String $table - the name of the table to run the insert
 	 * @param Array $values - A key=>value pair of table field names and values
-	 * @return mixed - lasst insert_id on success
+	 * @return mixed - last insert_id on success
 	 */
     public function insert($table, array $values) {
         $fields = '';
@@ -127,6 +125,36 @@ class Db extends \PDO {
         
         return $result;
     }
+	
+	
+	/**
+	 * @param String $table - the name of the table to run the insert
+	 * @param Array $where - the where clause for the update statement
+	 * @param Array $values - A key=>value pair of table field names and values
+	 * @return mixed - Row Count on success or FALSE on failure
+	 */
+	public function update($table, array $where, array $values) {
+		$whereFields = '';
+		foreach ($where as $key => $value) {
+			$whereFields .= $key.'=? AND';
+			$values[] = $value;
+		}
+		$whereFields = substr($whereFields, 0, -4);
+        $fields = '';
+        foreach ($values as $key => $value) {
+            $fields .= $key.'= ?,';
+        }
+        $fields = substr($fields, 0, -1);
+        
+        $stmt = $this->prepare('UPDATE '.$table.' SET '.$fields.' '.$where);
+        if ($stmt->exec($values)) {
+        	$result = $stmt->rowCount();
+		} else {
+            $result = FALSE;
+        }
+        
+        return $result;	
+	}
     
 	
 	/**
