@@ -7,7 +7,7 @@ class Config {
     private $validTypes = array(
         'database'
     );
-    private $configData;
+    private static $configData;
 	
 	
 	/**
@@ -30,16 +30,16 @@ class Config {
         $dbRequiredValues = array('user_name', 'user_pass', 'dbname', 'engine', 'host');
 		
         // check db values in config for required values set
-        if (ArrayUtils::values_eq_keys($dbRequiredValues, $dsnConfig)) {
+        if (\local\util\ArrayUtils::valuesEqKeys($dbRequiredValues, $dsnConfig)) {
         	throw new Exception('Invalid database parameters set: '.__FILE__.' at lineno: '.__LINE__);
         } else {
             $this->dbInfo = $dsnConfig;
-			$this->configData['database']['DB_DSN'] = $dsnConfig['engine'].':dbname='.$dsnConfig['dbname'].';host='.$dsnConfig['host'];
+			self::$configData['database']['DB_DSN'] = $dsnConfig['engine'].':dbname='.$dsnConfig['dbname'].';host='.$dsnConfig['host'];
 			
             unset($dsnConfig['engine'], $dsnConfig['dbname'], $dsnConfig['host']);
 			
             foreach ($dsnConfig as $varName => $value) {
-                $this->configData['database']['DB_'.strtoupper($varName)] = $value;
+                self::$configData['database']['DB_'.strtoupper($varName)] = $value;
             }
         }
     }
@@ -49,10 +49,9 @@ class Config {
 	 * @param $type string - a configuration header
 	 * @return mixed - array of values or FALSE upon no configuration section
 	 */
-	public function getConfig($type) {
-		var_dump($this);die;
-		if (isset($this->configData[$type]) && is_array($this->configData[$type])) {
-			$result = $this->configData[$type];
+	public static function getConfig($type) {
+		if (isset(slef:$configData[$type]) && is_array(self::$configData[$type])) {
+			$result = self::$configData[$type];
 		} else {
 			$result = FALSE;
 		}
