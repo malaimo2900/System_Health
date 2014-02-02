@@ -1,5 +1,7 @@
 <?php
 
+namespace local\util;
+
 /**
  * Utilities which operate on arrays
  */

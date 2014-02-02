@@ -1,8 +1,22 @@
 <?php
 
-// socket based chat
 
 require __DIR__.'/vendor/autoload.php';
+require __DIR__.'/local/autoload.php';
+
+
+//define(DB_DSN, '');
+//define(DB_USER_NAME, '');
+//define(DB_USER_PASS, '');
+
+//$db = db::obj();
+
+
+$init = new local\Init();
+list($config) = $init->run();
+
+$db = local\Db::obj();
+var_dump($config);
 
 $loop = React\EventLoop\Factory::create();
 $socket = new React\Socket\Server($loop);
