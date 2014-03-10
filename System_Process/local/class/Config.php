@@ -50,7 +50,7 @@ class Config {
 	 * @return mixed - array of values or FALSE upon no configuration section
 	 */
 	public static function getConfig($type) {
-		if (isset(slef:$configData[$type]) && is_array(self::$configData[$type])) {
+		if (isset(self::$configData[$type]) && is_array(self::$configData[$type])) {
 			$result = self::$configData[$type];
 		} else {
 			$result = FALSE;
